@@ -2,8 +2,10 @@ import requests
 import json
 from src.time_decorator import timeit
 
+from src.write_to_file import save_summary_in_file
+
 @timeit
-def get_summary(transcription):
+def get_summary(transcription, fname):
     url = "http://localhost:11434/api/generate"
     prompt = f'''This is from a youtube video, please summarise the following text into nice bulleted points so it will be easy for 
     me to understand when I go back to those notes. No need to make the transcriptions crisp. Make it as explainable as possible. 
@@ -24,5 +26,5 @@ def get_summary(transcription):
 
     response = requests.request("POST", url, headers=headers, data=payload)
     resp = response.json()["response"]
-    return resp
-
+    save_summary_in_file(resp, fname)
+    print("Summary saved!")

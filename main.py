@@ -1,7 +1,6 @@
-from youtube_transcript_api import YouTubeTranscriptApi
+import threading
 from src.generate_from_ollama import get_summary
 from src.generate_transcription import get_transcription
-from src.write_to_file import save_summary_in_file
 from src.video_name import get_video_title_from_link, extract_video_id
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
@@ -19,10 +18,10 @@ async def summarize(request: Request):
     video_id = extract_video_id(y_link)
     fname = get_video_title_from_link(video_id)
     transcription = get_transcription(video_id)
-    summary = get_summary(transcription)
-    save_summary_in_file(summary, fname)
+    thread1 = threading.Thread(target=get_summary, args=(transcription,fname))
+    thread1.start()
     return JSONResponse({
-        "summary": summary
+        "message": f"Summary will be saved in {fname}.md file in summaries folder."
         })
                 
     
