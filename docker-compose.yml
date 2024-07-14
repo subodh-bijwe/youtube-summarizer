@@ -1,0 +1,10 @@
+version : "1.0"
+services:
+  youtube-summarizer:
+    container_name: youtube-summarizer
+    image: subodhbijwe/youtube-summarizer
+    ports:
+      - "1234:1234"
+    build:
+      context: .
+      dockerfile: Dockerfile
